@@ -1,0 +1,363 @@
+﻿
+@using BlazorApp1.Model
+@using BlazorApp1.Services.UserService
+
+@inject ISnackbar Snackbar
+@inject IUserService _user
+@inject IJSRuntime JSRuntime
+@inject IDialogService DialogService
+@inject ILocalStorageService localstorage
+
+  <MudDialog>
+       <DialogContent>
+           <MudGrid Spacing="1">
+
+                 @* Add User Dialog *@
+                <MudHidden Breakpoint="Breakpoint.Xxl" Invert="isAddnewUSer">
+                <MudItem xs="12">
+                    <EditForm Model="newuser" OnValidSubmit="AddNewUser">
+                      <DataAnnotationsValidator />
+                          <MudCard>
+                       
+                             <MudCardContent>
+                                <MudTextField @bind-Value="newuser.Name" Label="Name" Variant="Variant.Outlined" Margin="Margin.Dense" Required></MudTextField>
+                                <MudTextField @bind-Value="newuser.username" Label="Username" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true"></MudTextField>
+                                <MudTextField @bind-Value="newuser.password" Label="Password" InputType="@PasswordInput" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true" ></MudTextField>
+                                <MudTextField @bind-Value="newuser.email" Label="Email"  Variant="Variant.Outlined" Margin="Margin.Dense" Required="true" ></MudTextField>
+        
+                                <MudStack >
+                                    <MudSelect @bind-Value="newuser.userlevel" Label="User Level" Required="true">
+                                        @foreach (var userlevellist in _userlevellist)
+                                        {
+                                            <MudSelectItem Value="userlevellist">@userlevellist</MudSelectItem>
+                                        }
+                                    </MudSelect>
+
+                                </MudStack>
+                             </MudCardContent>
+                             <MudCardActions>
+                                <MudSpacer />
+                                <MudButton OnClick="Cancel">Cancel</MudButton>
+                                <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary"> Sumbit </MudButton>
+
+                                @* <MudButton ButtonType="ButtonType.Submit" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Info" Size="Size.Medium">Submit</MudButton> *@
+                            </MudCardActions>
+                     </MudCard>
+                </EditForm>
+             </MudItem>
+        </MudHidden>
+
+              @* Edit User Dialog *@
+            <MudHidden Breakpoint="Breakpoint.Xxl" Invert="isEditUser">
+                <MudItem xs="12">
+                    <EditForm Model="newuser" OnValidSubmit="EditUder">
+                        <DataAnnotationsValidator />
+                        <MudCard>
+
+                            <MudCardContent>
+                                <MudTextField @bind-Value="newuser.Name" Label="Name" Variant="Variant.Outlined" Margin="Margin.Dense" Required></MudTextField>
+                                <MudTextField @bind-Value="newuser.username" Label="Username" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true"></MudTextField>
+                                <MudTextField @bind-Value="newuser.password" Label="Password" InputType="@PasswordInput" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true"></MudTextField>
+                                <MudTextField @bind-Value="newuser.email" Label="Email" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true"></MudTextField>
+
+                                <MudStack>
+                                    <MudSelect @bind-Value="newuser.userlevel" Label="User Level" Required="true">
+                                        @foreach (var userlevellist in _userlevellist)
+                                        {
+                                            <MudSelectItem Value="userlevellist">@userlevellist</MudSelectItem>
+                                        }
+                                    </MudSelect>
+
+                                </MudStack>
+                                <MudStack>
+                                    <MudSelect @bind-Value="newuser.userstatus" Label="User Status" Required="true">
+                                        @foreach (var userstatuslist in _userstatuslist)
+                                        {
+                                            <MudSelectItem Value="userstatuslist">@userstatuslist</MudSelectItem>
+                                        }
+                                    </MudSelect>
+
+                                </MudStack>
+
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudSpacer />
+                                <MudButton OnClick="Cancel">Cancel</MudButton>
+                                <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary"> Sumbit </MudButton>
+
+                                @* <MudButton ButtonType="ButtonType.Submit" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Info" Size="Size.Medium">Submit</MudButton> *@
+                            </MudCardActions>
+                        </MudCard>
+                    </EditForm>
+                </MudItem>
+            </MudHidden>
+
+
+            <MudHidden Breakpoint="Breakpoint.Xxl" Invert="isDeleteUser">
+                <MudItem xs="12">
+                    <EditForm Model="newuser" OnValidSubmit="DeleteUsers">
+                        <DataAnnotationsValidator />
+                        <MudCard>
+
+                            <MudCardContent>
+                                <MudTextField @bind-Value="newuser.Name" Label="Name" Variant="Variant.Outlined" Margin="Margin.Dense" Required></MudTextField>
+                                <MudTextField @bind-Value="newuser.username" Label="Username" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true"></MudTextField>
+                                <MudTextField @bind-Value="newuser.password" Label="Password" InputType="@PasswordInput" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true"></MudTextField>
+                                <MudTextField @bind-Value="newuser.email" Label="Email" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true"></MudTextField>
+
+                                <MudStack>
+                                    <MudSelect @bind-Value="newuser.userlevel" Label="User Level" Required="true">
+                                        @foreach (var userlevellist in _userlevellist)
+                                        {
+                                            <MudSelectItem Value="userlevellist">@userlevellist</MudSelectItem>
+                                        }
+                                    </MudSelect>
+
+                                </MudStack>
+                                <MudStack>
+                                    <MudSelect @bind-Value="newuser.userstatus" Label="User Status" Required="true">
+                                        @foreach (var userstatuslist in _userstatuslist)
+                                        {
+                                            <MudSelectItem Value="userstatuslist">@userstatuslist</MudSelectItem>
+                                        }
+                                    </MudSelect>
+
+                                </MudStack>
+
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudSpacer />
+                                <MudButton OnClick="Cancel">Cancel</MudButton>
+                                <MudButton ButtonType="ButtonType.Submit" Color="Color.Error"> Delete </MudButton>
+
+                                @* <MudButton ButtonType="ButtonType.Submit" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Info" Size="Size.Medium">Submit</MudButton> *@
+                            </MudCardActions>
+                        </MudCard>
+                    </EditForm>
+                </MudItem>
+            </MudHidden>
+
+
+      </MudGrid>
+   </DialogContent>
+</MudDialog>
+
+
+@code {
+
+
+    bool isAddnewUSer = true;
+    bool isEditUser = true;
+    bool isDeleteUser = true;
+
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+
+    [Parameter] public string DeleteUser { get; set; }
+    [Parameter] public string AddnewUser { get; set; }
+    [Parameter] public string EditUser { get; set; }
+    [Parameter] public int paramuserid { get; set; }
+    [Parameter] public users userslistparam { get; set; }
+
+
+
+
+    // private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+
+    InputType PasswordInput = InputType.Password;
+
+
+
+
+    private List<users> userlist = new List<users>();
+    users newuser = new users();
+
+    private users selectedUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+       
+        try
+        {
+            ////// Verify if users is already exist
+            // Fetch the list of users asynchronously from the service
+            var stat = "Active";
+
+            userlist = await _user.GetAlluser(stat);
+
+            var existingUser = userlist.FirstOrDefault(u => u.userid == paramuserid);
+
+
+            ///// From API Call
+            newuser.userid = paramuserid;
+            newuser.Name = existingUser.Name;
+            newuser.username = existingUser.username;
+            newuser.password = existingUser.password;
+            newuser.email = existingUser.email;
+            newuser.userlevel = existingUser.userlevel;
+            newuser.userstatus = existingUser.userstatus;
+            newuser.roleid = existingUser.roleid;
+
+
+
+        }
+        catch (Exception)
+        {
+
+
+
+            ////// From parameters
+            // newuser.userid = userslistparam.userid;
+            // newuser.Name = userslistparam.Name;
+            // newuser.username = userslistparam.username;
+            // newuser.password = userslistparam.password;
+            // newuser.email = userslistparam.email;
+            // newuser.userlevel = userslistparam.userlevel;
+            // newuser.userstatus = userslistparam.userstatus;
+            // newuser.roleid = userslistparam.roleid;
+
+
+        }
+
+       // selectedUser = userlist.FirstOrDefault(user => user.userid ==);
+
+
+
+
+
+        if (AddnewUser == "AddnewUser")
+        {
+            isAddnewUSer = false;
+
+
+        }
+
+        if (EditUser == "EditUser")
+        {
+            isEditUser = false;
+
+
+        }
+
+        if (DeleteUser == "DeleteUser")
+        {
+            isDeleteUser = false;
+
+
+        }
+
+    }
+
+
+    private async void DeleteUsers()
+    {
+
+        try
+        {
+            await _user.DeleteUser(paramuserid);
+
+            Snackbar.Add("Successfuly delete user", Severity.Success);
+            MudDialog.Close(DialogResult.Ok("Ok"));
+            StateHasChanged();
+
+
+        }
+        catch (Exception)
+        {
+            Snackbar.Add("Error Submit", Severity.Error);
+        }
+
+        
+
+    }
+
+    private async void EditUder()
+    {
+        try
+        {
+
+
+            await _user.Edituser(newuser);
+
+            Snackbar.Add("Successfuly Save", Severity.Success);
+            MudDialog.Close(DialogResult.Ok("Ok"));
+            StateHasChanged();
+
+
+
+        } catch (Exception)
+        {
+
+            Snackbar.Add("Error Submit", Severity.Error);
+            
+        }
+
+
+        
+
+    }
+
+    private async void AddNewUser()
+    {
+        try
+        {
+            string targetName = newuser.Name;
+            string targetUsername = newuser.username;
+            string targetemail = newuser.email;
+
+            ////// Verify if users is already exist
+            // Fetch the list of users asynchronously from the service
+            var stat = "Active";
+
+            userlist = await _user.GetAlluser(stat);
+
+            // Filter the user list to check if any user exists with the specified Name or Username
+            var existingUser = userlist.FirstOrDefault(u => u.Name == targetName || u.username == targetUsername || u.email == targetemail );
+
+            if (existingUser != null)
+            {
+                // User with the given Name or Username exists
+                // You can handle the logic here (e.g., throw an exception, display a message, etc.)
+                Snackbar.Add($"User with Name'{existingUser.Name}' or Username '{existingUser.username}' or Email {existingUser.email} already exists.", Severity.Warning);
+
+                //Console.WriteLine($"User with Name '{existingUser.Name}' or Username '{existingUser.username}' already exists.");
+            }
+            else
+            {
+                newuser.roleid = "1";
+                newuser.userstatus = "Active";
+                await _user.AddnewUser(newuser);
+
+                Snackbar.Add("Successfuly Save", Severity.Success);
+                MudDialog.Close(DialogResult.Ok("Ok"));
+                StateHasChanged();
+              
+              
+            }
+
+        }
+        catch (Exception)
+        {
+            Snackbar.Add("Successfuly Save", Severity.Success);
+        }
+    }
+
+
+
+
+    private string[] _userlevellist =
+    {
+        "Admin", "Admin1", "Admin2", "Admin3", "Admin4"
+        
+    };
+
+    private string[] _userstatuslist =
+       {
+        "Active", "InActive"
+
+    };
+}

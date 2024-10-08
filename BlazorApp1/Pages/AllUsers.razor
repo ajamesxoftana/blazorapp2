@@ -1,0 +1,52 @@
+﻿@page "/userlist"
+
+@using BlazorApp1.Services.UserService
+@using BlazorApp1.DTO
+
+@inject IUserService _user
+
+<h3>All Users</h3>
+@if (vusers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Avatar</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vsuser in vusers.Data)
+            {
+                <tr>
+                    <td><img src="@vsuser.Avatar" alt="User Avatar" width="50" height="50" /></td>
+                    <td>@vsuser.first_name</td>
+                    <td>@vsuser.last_name</td>
+                    <td>@vsuser.email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+@code {
+
+    private UsersResponse vusers ;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch users from the service
+        vusers = await _user.GetUsersAsync();
+
+
+
+    }
+}

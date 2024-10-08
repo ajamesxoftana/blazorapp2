@@ -1,0 +1,123 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
+
+<MudLayout Class="full-height">
+
+    <!-- App Bar -->
+    <MudAppBar Elevation="1" >
+        <MudText Typo="Typo.h5" Class="mt-1">Queuing Display</MudText>
+        <MudSpacer />
+
+        <MudText Typo="Typo.h5" Class="mt-1">@currentDateTime</MudText>
+    
+    </MudAppBar>
+
+    <!-- Drawer (Optional) -->
+
+
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Width="20%">
+
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">Logo</MudText>
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+         
+        </MudDrawerHeader>
+
+
+
+
+        <QNavMenu></QNavMenu>
+    </MudDrawer>
+
+
+
+    <!-- Main Content -->
+    <MudMainContent>
+        <MudContainer>
+            @Body
+        </MudContainer>
+    </MudMainContent>
+
+
+    <!-- Footer -->
+@*     <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Fixed="true" Class="mt-4" >
+        <MudPaper Elevation="4" Square="true" Class="pa-4">
+            <MudText Typo="Typo.body2" Align="Align.Center" Class="text-secondary">
+                © @DateTime.Now.Year My Application. All rights reserved.
+            </MudText>
+        </MudPaper>
+    </MudContainer> *@
+
+
+
+    <!-- App Bar"Footer" -->
+    <MudAppBar  Bottom="true" Dense="true" Style="background-color: transparent">
+       @*  <MudStack Row Spacing="0" Justify="Justify.SpaceBetween">
+
+            <MudText Typo="Typo.body2" Align="Align.Center" Class="text-secondary">
+                © @DateTime.Now.Year My Application. All rights reserved.
+            </MudText>
+        </MudStack>
+ *@
+
+        <MudPaper Elevation="0"  Width="100%">
+            <MudText Typo="Typo.body2" Align="Align.Center" Class="text-secondary">
+                © @DateTime.Now.Year My Application. All rights reserved.
+            </MudText>
+        </MudPaper>
+    </MudAppBar>
+
+
+</MudLayout>
+
+
+@code {
+
+
+
+    MudTheme _currentTheme = null;
+   bool _drawerOpen = true;
+
+    @code {
+
+
+       
+        private string currentDateTime;
+
+        protected override void OnInitialized()
+        {
+            // Set the initial date and time
+            currentDateTime = DateTime.Now.ToString("MMMM dd, yyyy HH:mm:ss");
+
+            // Start a timer to update the date and time every second
+            var timer = new System.Timers.Timer(1000);  // 1000 ms = 1 second
+            timer.Elapsed += UpdateDateTime;
+            timer.Start();
+        }
+
+        private void UpdateDateTime(object source, System.Timers.ElapsedEventArgs e)
+        {
+            // Update the date and time and trigger a UI update
+            currentDateTime = DateTime.Now.ToString("MMMM dd, yyyy HH:mm:ss");
+            InvokeAsync(StateHasChanged);  // Re-render the component
+        }
+    }
+
+}

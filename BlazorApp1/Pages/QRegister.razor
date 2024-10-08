@@ -1,0 +1,98 @@
+﻿
+@page "/qregister"
+
+
+
+<h3>TOP HERE !!! </h3>
+
+
+
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+
+    <MudGrid>
+
+
+        <MudItem xs="12" sm="6" md="4">
+
+
+            <MudCard Elevation="2" Class="pa-4 align-content-center cursor-pointer" Style="height: 200px;" @onclick="@(() => ClickCounter())">
+                            <MudCardHeader>
+                              
+                            </MudCardHeader>
+                            <MudCardContent>
+
+
+                    <MudText Typo="Typo.h5" Align="Align.Center">Counter 1 @currentCount </MudText>
+
+                            </MudCardContent>
+                            <MudCardActions>
+                            
+                            </MudCardActions>
+                   </MudCard>
+            
+             
+
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+
+            <MudPaper Elevation="2" Class="pa-4 align-content-center cursor-pointer" Style="height: 200px;" @onclick="@(() => ClickCounter())">
+                <MudCardHeader>
+
+                </MudCardHeader>
+                <MudCardContent>
+
+
+                    <MudText Typo="Typo.h5" Align="Align.Center">Counter 2 @currentCount </MudText>
+
+                </MudCardContent>
+                <MudCardActions>
+
+                </MudCardActions>
+            </MudPaper>
+
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4">
+
+            <MudCard Elevation="2" Class="pa-4 align-content-center cursor-pointer" Style="height: 200px;" @onclick="@(() => ClickCounter())">
+                <MudCardHeader>
+
+                </MudCardHeader>
+                <MudCardContent>
+
+
+                    <MudText Typo="Typo.h5" Align="Align.Center">Counter 3 @currentCount </MudText>
+
+                </MudCardContent>
+                <MudCardActions>
+
+                </MudCardActions>
+            </MudCard>
+
+        </MudItem>
+    
+    
+    
+    
+    
+    </MudGrid>
+
+
+
+
+
+</MudContainer>
+
+
+@code {
+
+    private int currentCount = 0;
+
+    private async void ClickCounter()
+    {
+        currentCount++;
+    }
+
+}
+
+
+

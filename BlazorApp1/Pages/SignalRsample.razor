@@ -1,0 +1,47 @@
+﻿@page "/sendsignal"
+
+
+@using BlazorApp1.Model
+
+@inject HttpClient Http
+
+<h3>Send Message to SignalR via Web API</h3>
+
+<div>
+    <input @bind="userName" placeholder="Enter user name" />
+    <input @bind="message" placeholder="Enter message" />
+    <button @onclick="SendMessage">Send Message</button>
+</div>
+
+<p>@statusMessage</p>
+
+@code {
+
+
+    private string userName;
+    private string message;
+    private string statusMessage;
+
+    private async Task SendMessage()
+    {
+        if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(message))
+        {
+            var messageModel = new MessageModel
+                {
+                    User = userName,
+                    Message = message
+                };
+
+            var response = await Http.PostAsJsonAsync("https://localhost:7039/api/SignalR/send-message", messageModel);
+
+            if (response.IsSuccessStatusCode)
+            {
+                statusMessage = "Message sent successfully!";
+            }
+            else
+            {
+                statusMessage = "Failed to send message.";
+            }
+        }
+    }
+}

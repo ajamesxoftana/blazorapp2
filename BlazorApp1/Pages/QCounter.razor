@@ -1,0 +1,291 @@
+﻿@page "/qcounter"
+
+@inject IJSRuntime JS
+
+
+<h3>QCounter</h3>
+
+<MudGrid Spacing="2">
+    <MudItem  sm="12" md="12">
+         <MudGrid>
+            <MudItem xs="12" md="4">
+
+                <MudItem xs="12">
+                    <MudPaper Square="true" Class=" pa-4 d-flex"  Outlined="true" Elevation="2" Style="height: 100px;">
+       
+         
+
+                        <MudText Typo="Typo.h6">Counter : 1</MudText>
+          
+             
+ 
+                   </MudPaper>
+
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudPaper Square="true" Class=" pa-4 d-flex" Outlined="true" Elevation="2" Style="height: 100px;">
+                        <MudText Typo="Typo.button">Current</MudText>
+                       <MudGrid>
+            
+                            <MudItem xs="12" Class="d-flex justify-center">
+
+                               <MudText Typo="Typo.h4">10002 </MudText>
+                            </MudItem>
+                     </MudGrid>
+
+
+                    </MudPaper>
+
+                </MudItem>
+      
+           </MudItem>
+
+            <MudItem xs="12" md="8">
+                <MudGrid Spacing="0" >
+                    <MudItem >
+                        <MudPaper Class="cursor-pointer" Height="100px" Width="200px" Square="true" @onclick="@(() => ClickCurrent())">
+
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" Variant="Variant.Outlined" Square="true" NoIcon="true" Style="height:100px">
+
+                                <MudCardActions Class="d-flex justify-center">
+
+                                    <MudIcon Icon="@Icons.Material.Outlined.ArrowCircleRight" Size="Size.Large" Title="Favorite" />
+                                </MudCardActions>
+                               <MudCardActions Class="d-flex justify-center">
+                                  
+                                    <MudText Typo="Typo.subtitle2">GET CURRINT NUMBER</MudText>
+                              </MudCardActions>
+                                
+                            
+                            </MudAlert>
+                         
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem>
+                        <MudPaper Class="cursor-pointer" Height="100px" Width="200px" Square="true" @onclick="@(() => ClickCurrent())">
+                             <MudAlert Severity="Severity.Info" ContentAlignment="HorizontalAlignment.Center" Variant="Variant.Filled" Square="true" NoIcon="true" Style="height:100px">
+
+                                <MudCardActions Class="d-flex justify-center">
+
+                                    <MudIcon Icon="@Icons.Material.Outlined.SpatialAudioOff" Size="Size.Large" Title="Favorite" />
+                                </MudCardActions>
+                                <MudCardActions Class="d-flex justify-center">
+
+                                    <MudText Typo="Typo.subtitle2">CALL AGAIN</MudText>
+                                </MudCardActions>
+
+
+                            </MudAlert>
+
+
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem>
+                        <MudPaper Class="cursor-pointer" Height="100px" Width="200px" Square="true" @onclick="@(() => ClickCurrent())">
+                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" Variant="Variant.Filled" Square="true" NoIcon="true" Style="height:100px">
+
+                                <MudCardActions Class="d-flex justify-center">
+
+                                    <MudIcon Icon="@Icons.Material.Outlined.PersonOff" Size="Size.Large" Title="Favorite" />
+                                </MudCardActions>
+                                <MudCardActions Class="d-flex justify-center">
+
+                                    <MudText Typo="Typo.subtitle2">NO SHOW</MudText>
+                                </MudCardActions>
+
+
+                            </MudAlert>
+
+
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem>
+                        <MudPaper Class="cursor-pointer" Height="100px" Width="200px" Square="true" @onclick="@(() => ClickCurrent())">
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" Variant="Variant.Filled" Square="true" NoIcon="true" Style="height:100px">
+
+                                <MudCardActions Class="d-flex justify-center">
+
+                                    <MudIcon Icon="@Icons.Material.Outlined.Check" Size="Size.Large" Title="Favorite" />
+                                </MudCardActions>
+                                <MudCardActions Class="d-flex justify-center">
+
+                                    <MudText Typo="Typo.subtitle2">
+                                      
+                                        Done</MudText>
+                                </MudCardActions>
+
+
+                            </MudAlert>
+
+
+                        </MudPaper>
+                    </MudItem>
+
+
+                  
+                </MudGrid>
+                <br />
+                  <hr />
+             
+                <br />
+                <MudGrid Spacing="1">
+                    <MudItem xs="12" md="6">
+                        <MudItem xs="12">
+                            <MudCard >
+                                <MudCardHeader Style="height: 5px" class="align-content-center">
+
+                                    <MudText>Waiting : 4 </MudText>
+                                   
+                                 </MudCardHeader>
+                                <hr />
+                                <MudCardContent>
+                                    <MudGrid>
+                                        <MudItem xs="12" md="4">
+                                            <MudCard Class="align-items-center">
+                                                <MudCardContent Class="align-content-center" Style="height:50px;">
+                                                      <MudText Typo="Typo.h6">10004 </MudText>
+                                                 </MudCardContent>
+                                                <MudCardActions Class="align-items-center" Style="height:30px">
+                                                    <MudText Typo="Typo.body2"> <MudIcon Icon="@Icons.Material.Outlined.AvTimer" Size="Size.Small"/> 00:00:01 </MudText>
+                                                </MudCardActions>
+
+                                            </MudCard>
+
+
+                                        </MudItem>
+                                        <MudItem xs="12" md="4">
+                                            <MudCard Class="align-items-center">
+                                                <MudCardContent Class="align-content-center" Style="height:50px;">
+                                                    <MudText Typo="Typo.h6">10005 </MudText>
+                                                </MudCardContent>
+                                                <MudCardActions Class="align-items-center" Style="height:30px">
+                                                    <MudText Typo="Typo.body2"> <MudIcon Icon="@Icons.Material.Outlined.AvTimer" Size="Size.Small" /> 00:00:01 </MudText>
+                                                </MudCardActions>
+
+                                            </MudCard>
+
+
+                                        </MudItem>
+                                        <MudItem xs="12" md="4">
+                                            <MudCard Class="align-items-center">
+                                                <MudCardContent Class="align-content-center" Style="height:50px;">
+                                                    <MudText Typo="Typo.h6">10006 </MudText>
+                                                </MudCardContent>
+                                                <MudCardActions Class="align-items-center" Style="height:30px">
+                                                    <MudText Typo="Typo.body2"> <MudIcon Icon="@Icons.Material.Outlined.AvTimer" Size="Size.Small" /> 00:00:01 </MudText>
+                                                </MudCardActions>
+
+                                            </MudCard>
+
+
+                                        </MudItem>
+                                        <MudItem xs="12" md="4">
+                                            <MudCard Class="align-items-center">
+                                                <MudCardContent Class="align-content-center" Style="height:50px;">
+                                                    <MudText Typo="Typo.h6">10007 </MudText>
+                                                </MudCardContent>
+                                                <MudCardActions Class="align-items-center" Style="height:30px">
+                                                    <MudText Typo="Typo.body2"> <MudIcon Icon="@Icons.Material.Outlined.AvTimer" Size="Size.Small" /> 00:00:01 </MudText>
+                                                </MudCardActions>
+
+                                            </MudCard>
+
+
+                                        </MudItem>
+
+
+
+
+                                    </MudGrid>
+                                      
+                                </MudCardContent>
+                              
+
+                            </MudCard>
+                        </MudItem>
+
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudItem xs="12">
+                             <MudCard >
+                                <MudCardHeader Style="height: 5px" class="align-content-center">
+
+                                    <MudText>No Show : 1 </MudText>
+
+                                </MudCardHeader>
+                                <hr />
+                                  <MudCardContent>
+                                      <MudGrid>
+                                        <MudItem xs="12" md="4">
+                                            <MudCard Class="align-items-center">
+                                                <MudCardContent Class="align-content-center" Style="height:50px;">
+                                                    <MudText Typo="Typo.h6">10003 </MudText>
+                                                </MudCardContent>
+                                                <MudCardActions Class="align-items-center" Style="height:30px">
+                                                    <MudText Typo="Typo.body2"> <MudIcon Icon="@Icons.Material.Outlined.AvTimer" Size="Size.Small" /> 00:00:01 </MudText>
+                                                </MudCardActions>
+
+                                            </MudCard>
+
+
+                                        </MudItem>
+
+
+                                      </MudGrid>
+
+
+                                  </MudCardContent>
+
+
+                            </MudCard>
+                        </MudItem>
+                        
+
+                    </MudItem>
+
+
+                </MudGrid>
+
+            </MudItem>
+         </MudGrid>
+    </MudItem>
+</MudGrid>
+
+@code {
+
+
+    bool showAdorners;
+    bool hideContent;
+    int counter = 2;
+    void Count()
+    {
+        counter++;
+    }
+    private string deviceId;
+
+    private async void ClickCurrent()
+    {
+        
+    
+    
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        deviceId = await JS.InvokeAsync<string>("localStorage.getItem", "deviceId");
+        if (string.IsNullOrEmpty(deviceId))
+        {
+            deviceId = Guid.NewGuid().ToString();
+            await JS.InvokeVoidAsync("localStorage.setItem", "deviceId", deviceId);
+        }
+    }
+
+
+
+
+
+
+}
+

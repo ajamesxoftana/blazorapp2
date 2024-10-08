@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlazorApp1</title>
+    <base href="/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="BlazorApp1.styles.css" rel="stylesheet" />
+    <link href="manifest.webmanifest" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+
+    <!--<script>
+        function registerVideoEndedHandler(dotnetHelper) {
+            document.querySelectorAll('video').forEach(video => {
+                video.onended = function () {
+                    dotnetHelper.invokeMethodAsync('OnVideoEnded');
+                };
+            });
+        }
+    </script>-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://localhost:7039/SignalrHub") // The API endpoint where your hub is exposed
+            .build();
+
+        // Function to handle messages from the server
+        connection.on("ReceiveMessage", (user, message) => {
+            console.log(`${user}: ${message}`);
+        });
+
+        // Start the connection
+        connection.start().catch(err => console.error(err.toString()));
+
+        // Send message to the server
+        function sendMessage(user, message) {
+            connection.invoke("SendMessage", user, message)
+                .catch(err => console.error(err.toString()));
+        }
+    </script>
+
+    <script>
+        window.blazorApp = {
+            listenForUpdates: function (dotnetHelper) {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.addEventListener('message', function (event) {
+                        if (event.data === 'UPDATE_AVAILABLE') {
+                            dotnetHelper.invokeMethodAsync('NotifyUpdateAvailable');
+                        }
+                    });
+                }
+            }
+        };
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+﻿@page "/"
+
+
+@using BlazorApp1.Services.UserService
+@using BlazorApp1.Services.VersionService
+
+@using BlazorApp1.Model
+
+
+@inject IUserService _user
+@inject ISnackbar Snackbar
+@inject IVersionCheckService VersionCheckService
+
+<h3>dashboard</h3>
+
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%"></MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+
+
+@code {
+
+
+
+    private string stat { get; set; }
+
+    private List<users> userlist = new List<users>();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+      //  await VersionCheckService.CheckForUpdate();
+
+        // try
+        // {
+
+        //     await UserService.LoadUsersAsync(_user);
+
+
+
+        // } catch (Exception) { }
+       
+
+
+
+        try
+        {
+           
+
+            // Example status parameter (you can make this dynamic)
+            var stat = "Active";
+
+            // Fetch the list of users asynchronously from the service
+            userlist = await _user.GetAlluser(stat);
+
+            // Check if no data is returned and handle accordingly
+            if (userlist == null || !userlist.Any())
+            {
+                // Show a warning if no data is found (optional)
+                Snackbar.Add("No data found: User list is empty", Severity.Warning);
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log or handle any exceptions that occur during the API call
+            Console.WriteLine($"Error occurred while fetching users: {ex.Message}");
+            Snackbar.Add($"Error occurred: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            // End the loading process
+            //isLoading = false;
+        }
+
+    }
+}

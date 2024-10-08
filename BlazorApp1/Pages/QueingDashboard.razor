@@ -1,0 +1,95 @@
+﻿
+@page "/qdash"
+
+@layout QmainLayout
+
+
+
+<MudGrid>
+    <MudItem xs="12">
+        <h3></h3>
+
+    </MudItem>
+    <MudGrid></MudGrid>
+    <br/>
+    <MudContainer MaxWidth="MaxWidth.Medium">
+
+    <MudGrid>
+        <MudItem xs="12">
+
+                <MudCarousel Class="mud-width-full" Style="height:400px; width:100%"
+                             ShowArrows="@arrows" ShowBullets="@bullets"
+                             EnableSwipeGesture="@enableSwipeGesture"
+                             AutoCycle="true" TData="object">
+
+                    <MudCarouselItem Transition="@transition" IsActive="@IsActive(0)">
+                        <div class="d-flex" style="height:100%">
+                            <video width="100%" autoplay controls @onended="() => OnVideoEnded(0)">
+                                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </MudCarouselItem>
+
+                    <MudCarouselItem Transition="@transition" IsActive="@IsActive(1)">
+                        <div class="d-flex" style="height:100%">
+                            <video width="100%" autoplay controls @onended="() => OnVideoEnded(1)">
+                                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </MudCarouselItem>
+
+                    <MudCarouselItem Transition="@transition" IsActive="@IsActive(2)">
+                        <div class="d-flex" style="height:100%">
+                            <video width="100%" autoplay controls @onended="() => OnVideoEnded(2)">
+                                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </MudCarouselItem>
+
+                </MudCarousel>
+               @*  <MudPaper Elevation="3" Class="pa-4">
+                    <MudText Typo="Typo.h6" Align="Align.Center">Watch this Video</MudText>
+
+                    <MudDivider Class="mb-3" />
+
+                    <!-- Video element inside MudPaper -->
+                    <video width="100%" controls>
+                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </MudPaper> *@
+
+        </MudItem>
+    </MudGrid>
+
+    </MudContainer>
+
+ </MudGrid>
+
+@code {
+
+    private bool arrows = true;
+    private bool bullets = true;
+    private bool enableSwipeGesture = true;
+    private Transition transition = Transition.Slide;
+
+    // Current index of the carousel
+    private int currentIndex = 0;
+
+    private void OnVideoEnded(int index)
+    {
+        // Move to the next slide
+        currentIndex = (index + 1) % 3; // Wrap around to first slide if at the end
+        //StateHasChanged(); // Trigger a UI update
+    }
+
+    private bool IsActive(int index)
+    {
+        return index == currentIndex;
+    }
+
+   
+}

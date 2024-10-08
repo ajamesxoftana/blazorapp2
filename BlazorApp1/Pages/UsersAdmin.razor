@@ -1,0 +1,309 @@
+﻿@page "/usersadmin"
+
+
+@using System.Net.Http.Json
+@using BlazorApp1.Model
+@using BlazorApp1.Pages.Dialog
+@using BlazorApp1.Services.UserService
+@using Microsoft.AspNetCore.SignalR.Client
+
+
+
+@inject HubConnection HubConnection
+@inject HttpClient httpClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject IUserService _user
+@inject ILocalStorageService localstorage
+
+<MudGrid>
+        <MudItem xs="12" md="12">
+             <MudCard>
+                <MudTable Items="@userlist" Hover="true" Breakpoint="Breakpoint.Sm" Dense="true">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">Admin User</MudText>
+                    <MudSpacer />
+                    <MudButton OnClick="AddUser" Variant="Variant.Filled" Color="Color.Success">Add User</MudButton>
+                    @* <MudButton Variant="Variant.Outlined" ButtonType="ButtonType.Submit" OnClick="AddUser" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Primary" Size="Size.Medium">Add New User</MudButton> *@
+                </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Username</MudTh>
+                        <MudTh>Email</MudTh>
+                        <MudTh>Role ID</MudTh>
+                        <MudTh>User Level</MudTh>
+                        <MudTh>Status</MudTh>
+                @*         <MudTh>Location</MudTh>
+                        <MudTh>User Status</MudTh>*@
+                        <MudTh>Edit</MudTh> 
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Name">@context.Name</MudTd>
+                        <MudTd DataLabel="Description">@context.username</MudTd>
+                        <MudTd DataLabel="Status">@context.email</MudTd>
+                        <MudTd DataLabel="TAT">@context.roleid</MudTd>
+                        <MudTd DataLabel="Withtextarea">@context.userlevel</MudTd>
+                        <MudTd DataLabel="Withtextarea">@context.userstatus</MudTd>
+                        <MudTd DataLabel="Edit">
+                           <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditUser(context)" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteUser(context)" Variant="Variant.Outlined" Color="Color.Error" Size="Size.Small" />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager />
+                    </PagerContent>
+                </MudTable>
+                </MudCard>
+        </MudItem>
+</MudGrid>
+
+
+@code {
+
+    private string userName;
+    private string message;
+    private List<string> messages = new List<string>();
+
+ 
+
+    private bool _hidePosition;
+    private bool _loading;
+
+    private string stat { get; set; }
+
+    private List<users> userlist = new List<users>();
+
+
+
+    private readonly DialogOptions _maxWidth = new() { MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.TopCenter };
+
+    private Task OpenDialogAsync(DialogOptions options)
+    {
+        //var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        return DialogService.ShowAsync<AddUserDialog>("Simple Dialog", options);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+
+        try
+        {
+            // Start the loading process
+            //isLoading = true;
+
+            // Example status parameter (you can make this dynamic)
+            var stat = "Active";
+
+            // Fetch the list of users asynchronously from the service
+            userlist = await _user.GetAlluser(stat);
+
+            // Check if no data is returned and handle accordingly
+            if (userlist == null || !userlist.Any())
+            {
+                // Show a warning if no data is found (optional)
+                Snackbar.Add("No data found: User list is empty", Severity.Warning);
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log or handle any exceptions that occur during the API call
+            Console.WriteLine($"Error occurred while fetching users: {ex.Message}");
+            Snackbar.Add($"Error occurred: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            // End the loading process
+            //isLoading = false;
+        }
+
+
+        // // Set up the connection to listen for messages
+        // HubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        // {
+        //     var newMessage = $"{user}: {message}";
+        //     messages.Add(newMessage);
+        //     InvokeAsync(StateHasChanged); // Refresh the UI
+        // });
+
+        // // Start the SignalR connection
+        // await HubConnection.StartAsync();
+
+
+    }
+
+    private async void DeleteUser(users nuser)
+    {
+        int newuserid = nuser.userid;
+
+        var parameters = new DialogParameters();
+        parameters.Add("DeleteUser", "DeleteUser");
+        parameters.Add("paramuserid", newuserid);
+
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.TopCenter };
+        var dialog = DialogService.Show<AddUserDialog>("Are user you want to delte user", parameters, options);
+
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            try
+            {
+                // Start the loading process
+                //isLoading = true;
+
+                // Example status parameter (you can make this dynamic)
+                var stat = "Active";
+
+                // Fetch the list of users asynchronously from the service
+                userlist = await _user.GetAlluser(stat);
+
+                // Check if no data is returned and handle accordingly
+                if (userlist == null || !userlist.Any())
+                {
+                    // Show a warning if no data is found (optional)
+                    Snackbar.Add("No data found: User list is empty", Severity.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle any exceptions that occur during the API call
+                Console.WriteLine($"Error occurred while fetching users: {ex.Message}");
+                Snackbar.Add($"Error occurred: {ex.Message}", Severity.Error);
+            }
+            finally
+            {
+                // End the loading process
+                //isLoading = false;
+            }
+
+            StateHasChanged();
+
+        }
+
+
+
+
+
+    }
+
+    private async void EditUser(users nuser)
+    {
+        int newuserid = nuser.userid;
+
+        var parameters = new DialogParameters();
+        parameters.Add("EditUser", "EditUser");
+        parameters.Add("paramuserid", newuserid);
+        parameters.Add("userslistparam", nuser);
+
+       await localstorage.SetItemAsync("userid", newuserid.ToString());
+       await localstorage.SetItemAsync("Name", nuser.Name);
+
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.TopCenter };
+        var dialog = DialogService.Show<AddUserDialog>("Edit User", parameters, options);
+
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            try
+            {
+                // Start the loading process
+                //isLoading = true;
+
+                // Example status parameter (you can make this dynamic)
+                var stat = "Active";
+
+                // Fetch the list of users asynchronously from the service
+                userlist = await _user.GetAlluser(stat);
+
+                // Check if no data is returned and handle accordingly
+                if (userlist == null || !userlist.Any())
+                {
+                    // Show a warning if no data is found (optional)
+                    Snackbar.Add("No data found: User list is empty", Severity.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle any exceptions that occur during the API call
+                Console.WriteLine($"Error occurred while fetching users: {ex.Message}");
+                Snackbar.Add($"Error occurred: {ex.Message}", Severity.Error);
+            }
+            finally
+            {
+                // End the loading process
+                //isLoading = false;
+            }
+
+            StateHasChanged();
+            
+        
+        }
+
+
+    }
+
+    private async void AddUser()
+    {
+
+
+        var parameters = new DialogParameters();
+
+        parameters.Add("AddnewUser", "AddnewUser");
+      
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.TopCenter };
+
+        var dialog = DialogService.Show<AddUserDialog>("Add New User", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+
+            try
+            {
+                // Start the loading process
+                //isLoading = true;
+
+                // Example status parameter (you can make this dynamic)
+                var stat = "Active";
+
+                // Fetch the list of users asynchronously from the service
+                userlist = await _user.GetAlluser(stat);
+
+                // Check if no data is returned and handle accordingly
+                if (userlist == null || !userlist.Any())
+                {
+                    // Show a warning if no data is found (optional)
+                    Snackbar.Add("No data found: User list is empty", Severity.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle any exceptions that occur during the API call
+                Console.WriteLine($"Error occurred while fetching users: {ex.Message}");
+                Snackbar.Add($"Error occurred: {ex.Message}", Severity.Error);
+            }
+            finally
+            {
+                // End the loading process
+                //isLoading = false;
+            }
+
+            StateHasChanged();
+        }
+
+        StateHasChanged();
+
+
+    }
+
+
+
+
+}
+
+
+
+  
